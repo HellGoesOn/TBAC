@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TBAC.Content.Systems;
 using TBAC.Core.Animations;
 using Terraria;
 using Terraria.ModLoader;
 
 namespace TBAC.Content.Projectiles.Test
 {
-    public class SpriteTestProjectile : StandProjectile
+    public class SpriteTestProjectile2 : StandProjectile
     {
         Sprite sprite;
 
@@ -18,6 +17,7 @@ namespace TBAC.Content.Projectiles.Test
             for (int i = 0; i < 14; i++) {
                 Frame frame = new Frame(0, 80 * i, 50, 80);
                 frame.origin = new Vector2(25, 40);
+                frame.color = Color.Red;
                 sprite.Frames.Add(frame);
             }
 

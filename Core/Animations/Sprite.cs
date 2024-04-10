@@ -38,7 +38,7 @@ namespace TBAC.Core.Animations
             }
         }
 
-        public void Draw(int X, int Y, float rotation, SpriteEffects spriteEffects = default)
+        public void Draw(int X, int Y, float rotation, SpriteEffects spriteEffects = default, Color lightColor = default)
         {
             var texture = ModContent.Request<Texture2D>(texturePath).Value;
 
@@ -49,8 +49,9 @@ namespace TBAC.Core.Animations
             Frame frame = Frames[currentFrame]; // use current frame for drawing
             SpriteEffects effects = spriteEffects == default ? frame.effects : spriteEffects; /* if we don't override spriteEffects, we'll be using the one supplied by the frame.
                                                                                                * useful in case we want an animation that wants to always face a certain direction*/
+            Color color = lightColor == default ? frame.color : lightColor;
 
-            Main.EntitySpriteDraw(texture, position - Main.screenPosition, frame.GetRect(), frame.color, rotation, frame.origin, frame.scale, effects, 0);
+            Main.EntitySpriteDraw(texture, position - Main.screenPosition, frame.GetRect(), color, rotation, frame.origin, frame.scale, effects, 0);
         }
     }
 }

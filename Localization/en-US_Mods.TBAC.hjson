@@ -1,1 +1,9 @@
-Projectiles.SpriteTestProjectile.DisplayName: Sprite Test Projectile
+Projectiles: {
+	SpriteTestProjectile.DisplayName: Sprite Test Projectile
+	SpriteTestProjectile2.DisplayName: Sprite Test Projectile2
+}
+
+Keybinds: {
+	SummonStand.DisplayName: Summon Stand
+	GetRandomStand.DisplayName: Get Random Stand
+}
