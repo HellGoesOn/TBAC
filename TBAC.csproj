@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Textures\Holdplacer.png" />
+    <None Remove="Assets\Textures\PH_Legs.png" />
     <None Remove="Assets\Textures\Test.png" />
   </ItemGroup>
   <ItemGroup>

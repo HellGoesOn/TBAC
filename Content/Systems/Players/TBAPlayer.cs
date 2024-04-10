@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Converters;
+using System.IO;
 using TBAC.Content.Projectiles.Test;
+using TBAC.Core;
 using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 
 namespace TBAC.Content.Systems.Players
 {
-    public class TBAPlayer : ModPlayer
+    public partial class TBAPlayer : ModPlayer
     {
         public int currentStand;
         public bool isStandActive;
@@ -14,6 +17,14 @@ namespace TBAC.Content.Systems.Players
         public override void Initialize()
         {
             currentStand = -1;
+        }
+
+        public override void PostUpdate()
+        {
+            if(isStandActive) {
+                if (Player.ownedProjectileCounts[currentStand] < 1)
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, currentStand, 0, 0, Player.whoAmI);
+            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -27,10 +38,7 @@ namespace TBAC.Content.Systems.Players
                 return;
 
             if(TBAInput.SummonStand.JustPressed) {
-                isStandActive = true;
-
-                if (Player.ownedProjectileCounts[currentStand] < 1)
-                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, currentStand, 0, 0, Player.whoAmI);
+                isStandActive = !isStandActive;
             }
         }
 

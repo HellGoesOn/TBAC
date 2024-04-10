@@ -1,9 +1,10 @@
+using System.IO;
 using TBAC.Content.Systems;
 using Terraria.ModLoader;
 
 namespace TBAC
 {
-	public class TBAC : Mod
+	public partial class TBAC : Mod
 	{
 		public const string AssetPath = "TBAC/Assets/";
 

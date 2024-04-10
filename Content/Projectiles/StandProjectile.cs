@@ -26,7 +26,7 @@ namespace TBAC.Content.Projectiles
 
         public sealed override void AI() // sealed override to make sure some code is forced to be inhereted
         {
-            if (TBAPlayer.Get(GetOwner()).currentStand != Projectile.type) {
+            if (TBAPlayer.Get(GetOwner()).currentStand != Projectile.type || !TBAPlayer.Get(GetOwner()).isStandActive) {
                 TBAPlayer.Get(GetOwner()).isStandActive = false;
                 Projectile.Kill();
             }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using TBAC.Content.Systems;
 using TBAC.Core.Animations;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace TBAC.Content.Projectiles.Test
