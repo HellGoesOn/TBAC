@@ -10,9 +10,15 @@
   <ItemGroup>
     <None Remove="Assets\Textures\Holdplacer.png" />
     <None Remove="Assets\Textures\PH_Legs.png" />
+    <None Remove="Assets\Textures\StarPlatinum\Idle.png" />
+    <None Remove="Assets\Textures\StarPlatinum\PunchMid1.png" />
+    <None Remove="Assets\Textures\StarPlatinum\Uppercut.png" />
     <None Remove="Assets\Textures\Test.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Systems\Input\" />
   </ItemGroup>
 </Project>

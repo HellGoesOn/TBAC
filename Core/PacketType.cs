@@ -8,6 +8,7 @@ namespace TBAC.Core
 {
     public enum PacketType
     {
-        PlayerSync
+        PlayerSync,
+        UsedCombo
     }
 }

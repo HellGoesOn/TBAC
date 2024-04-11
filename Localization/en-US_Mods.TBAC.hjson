@@ -1,6 +1,7 @@
 Projectiles: {
 	SpriteTestProjectile.DisplayName: Sprite Test Projectile
 	SpriteTestProjectile2.DisplayName: Sprite Test Projectile2
+	StarPlatinumProjectile.DisplayName: Star Platinum Projectile
 }
 
 Keybinds: {

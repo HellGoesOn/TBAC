@@ -3,18 +3,21 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
+using System;
 
 namespace TBAC.Core.Animations
 {
     public class Sprite
     {
-        public string texturePath;
-
         public int currentFrame;
         public int frameTime;
         public int FrameCount => Frames.Count;
 
+        public string texturePath;
+
         public List<Frame> Frames { get; private set; } = new();
+
+        public Action onAnimationEnd;
 
         public Sprite(string texturePath)
         {
@@ -31,6 +34,7 @@ namespace TBAC.Core.Animations
             if (++frameTime >= Frames[currentFrame].frameLength) {
 
                 if (++currentFrame >= FrameCount) {
+                    onAnimationEnd?.Invoke();
                     currentFrame = 0;
                 }
 

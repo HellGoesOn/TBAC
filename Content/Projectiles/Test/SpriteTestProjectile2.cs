@@ -33,7 +33,7 @@ namespace TBAC.Content.Projectiles.Test
         {
             Projectile.timeLeft = 60;
 
-            Projectile.Center = GetOwner().Center + new Vector2(50 * -GetOwner().direction, -20);
+            Projectile.Center = GetOwner.Center + new Vector2(50 * -GetOwner.direction, -20);
 
             sprite.Update();
         }
@@ -42,7 +42,7 @@ namespace TBAC.Content.Projectiles.Test
         {
             base.PostDraw(lightColor);
 
-            SpriteEffects effects = GetOwner().direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects effects = GetOwner.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             sprite.Draw((int)Projectile.Center.X, (int)Projectile.Center.Y, 0, effects);
         }
