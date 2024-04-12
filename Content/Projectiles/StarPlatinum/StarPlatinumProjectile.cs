@@ -30,6 +30,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
 
         int elapsedTime;
         bool lastRMBState;
+        bool lockedOverride;
 
         public override void SafeSetDefaults()
         {
@@ -66,7 +67,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                 a_uppercut.Frames.Add(frame);
             }
 
-            a_uppercut.onAnimationEnd += () => { SetAnimation(Anim_Idle); };
+            a_uppercut.onAnimationEnd += () => { lockedOverride = false; SetAnimation(Anim_Idle); };
 
             sprites.Add(Anim_Idle, a_idle); // <-- adds sprite to be used
             sprites.Add(Anim_PunchMid1, a_punchMid1);
@@ -90,12 +91,14 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                 var test2 = plr.AddCombo(new(ValidInput.LMB, 0), new(ValidInput.LMB, 30, 90), new(ValidInput.LMB, 0));
                 var test1 = plr.AddCombo(new(ValidInput.LMB, 0), new(ValidInput.LMB, 0), new(ValidInput.LMB, 0));
 
-                test1.activationEffect += () => { Console.WriteLine("Test1");  Main.NewText("Test 1"); };
-                test2.activationEffect += () => { 
-                    Console.WriteLine("Test 2");
-                    Main.NewText("Test 2");
+                test1.activationEffect += () => { Console.WriteLine("Test 1");  Main.NewText("Test 1"); };
+                test2.activationEffect += () => {
                     SetAnimation(Anim_UpperCut);
-                    };
+                    var text = $"Player {plr.Player.name} used Test 2 for Projectile {Projectile.whoAmI} resulting in {_currentAnimation} being used";
+                    Console.WriteLine(text);
+                    Main.NewText(text);
+                    lockedOverride = true;
+                };
 
                 initialized = true;
             }
@@ -105,9 +108,9 @@ namespace TBAC.Content.Projectiles.StarPlatinum
 
         public override void SafeAI()
         {
-            Projectile.Center = GetOwner.Center + new Vector2(50 * -GetOwner.direction, -20);
             Projectile.timeLeft = 60;
-            Projectile.netUpdate = true;
+
+            var destination = GetOwner.Center + new Vector2(50 * -GetOwner.direction, -20);
 
             if (GetOwner.controlUseItem && !lastRMBState) {
                 PunchTimer = 120;
@@ -116,12 +119,14 @@ namespace TBAC.Content.Projectiles.StarPlatinum
 
             if (PunchTimer > 0) {
                 PunchTimer--;
-                Projectile.Center = new Vector2(mouseX, mouseY);
+
+                destination = GetMousePosition();
             }
 
-            sprites[_currentAnimation].Update();
+            Projectile.Center = Vector2.SmoothStep(Projectile.Center, destination, 0.3f);
             elapsedTime++;
             lastRMBState = GetOwner.controlUseItem;
+            sprites[_currentAnimation].Update();
         }
 
         public override void PostDraw(Color lightColor)
@@ -131,10 +136,14 @@ namespace TBAC.Content.Projectiles.StarPlatinum
             SpriteEffects effects = GetOwner.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             sprites[_currentAnimation].Draw((int)Projectile.Center.X, (int)Projectile.Center.Y, 0, effects);
+            Utils.DrawBorderString(Main.spriteBatch, $"{_currentAnimation}", Projectile.Center - Main.screenPosition - new Vector2(20, 40), Color.White, 0.75f);
         }
 
         public void SetAnimation(string value, bool allowSame = false)
         {
+            if (lockedOverride)
+                return;
+
             if (!string.IsNullOrWhiteSpace(_currentAnimation) && (value != _currentAnimation || allowSame)) { // <-- prevents resetting animation needlessly & a crash if we had no animation set before
                 sprites[_currentAnimation].currentFrame = 0;
                 sprites[_currentAnimation].frameTime = 0;

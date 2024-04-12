@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace TBAC.Content.Projectiles.Test
 {
-    public class SpriteTestProjectile2 : StandProjectile
+    /*public class SpriteTestProjectile2 : StandProjectile
     {
         Sprite sprite;
 
@@ -46,5 +46,5 @@ namespace TBAC.Content.Projectiles.Test
 
             sprite.Draw((int)Projectile.Center.X, (int)Projectile.Center.Y, 0, effects);
         }
-    }
+    }*/
 }

@@ -11,7 +11,7 @@ namespace TBAC.Content.Systems.Players
     public partial class TBAPlayer
     {
         public List<InputCombo> Combos;
-        const int TimeOut = 300;
+        const int TimeOut = 120;
         public int elapsedTime;
         public int usedComboId;
         public bool usedCombo;

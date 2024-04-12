@@ -19,7 +19,7 @@ namespace TBAC.Content.Systems.Players
             packet.Write((byte)PacketType.PlayerSync);
             packet.Write((byte)Player.whoAmI);
             packet.Write((int)currentStand);
-            packet.Write((int)usedComboId);
+            //packet.Write((int)usedComboId);
             packet.Write((bool)isStandActive);
             packet.Send(toWho, fromWho);
         }
@@ -28,14 +28,14 @@ namespace TBAC.Content.Systems.Players
         {
             TBAPlayer clone = (TBAPlayer)targetCopy;
             clone.currentStand = currentStand;
-            clone.usedComboId = usedComboId;
+            //clone.usedComboId = usedComboId;
             clone.isStandActive = isStandActive;
         }
 
         public void ReceivePlayerSync(BinaryReader reader)
         {
             currentStand = reader.ReadInt32();
-            usedComboId = reader.ReadInt32();
+            //usedComboId = reader.ReadInt32();
             isStandActive = reader.ReadBoolean();
         }
 
@@ -43,7 +43,7 @@ namespace TBAC.Content.Systems.Players
         {
             TBAPlayer clone = (TBAPlayer)clientPlayer;
 
-            if (currentStand != clone.currentStand || isStandActive != clone.isStandActive || clone.usedComboId != usedComboId) {
+            if (currentStand != clone.currentStand || isStandActive != clone.isStandActive /*|| clone.usedComboId != usedComboId*/) {
                 SyncPlayer(-1, Main.myPlayer, false);
             }
         }

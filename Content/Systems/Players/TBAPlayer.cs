@@ -8,6 +8,7 @@ using TBAC.Content.Projectiles.Test;
 using TBAC.Core;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace TBAC.Content.Systems.Players
@@ -41,6 +42,14 @@ namespace TBAC.Content.Systems.Players
                 isComboAlive = false;
                 foreach (var item in Combos) {
                     item.ResetProgress();
+                }
+
+                if(Main.netMode == NetmodeID.MultiplayerClient) {
+                    ModPacket packet = Mod.GetPacket();
+                    packet.Write((byte)PacketType.UsedCombo);
+                    packet.Write((byte)Player.whoAmI);
+                    packet.Write((byte)usedComboId);
+                    packet.Send();
                 }
             }
         }

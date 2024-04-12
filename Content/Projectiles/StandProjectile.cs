@@ -9,6 +9,8 @@ namespace TBAC.Content.Projectiles
 {
     public abstract class StandProjectile : ModProjectile
     {
+        const int rate = 4;
+
         public bool initialized;
 
         public override string Texture => TBAC.TextureHoldplacer;
@@ -18,10 +20,14 @@ namespace TBAC.Content.Projectiles
         public float mouseX;
         public float mouseY;
 
+        public Vector2 mousePosition;
+        public Vector2? oldMousePosition;
+
         public sealed override void SetDefaults()
         {
             mouseX = 0;
             mouseY = 0;
+            oldMousePosition = null;
             base.SetDefaults();
 
             if (!StandLoader.Stands.Contains(Projectile.type))
@@ -44,9 +50,18 @@ namespace TBAC.Content.Projectiles
             if (GetOwner.whoAmI == Main.myPlayer) {
                 mouseX = Main.MouseWorld.X;
                 mouseY = Main.MouseWorld.Y;
+                if(Main.GameUpdateCount % rate == 0)
+                    Projectile.netUpdate = true;
             }
 
+            mousePosition = new Vector2(mouseX, mouseY);
+
             SafeAI();
+
+            if (oldMousePosition == null || oldMousePosition != new Vector2(mouseX, mouseY)) {
+
+                oldMousePosition = new Vector2(mouseX, mouseY);
+            }
         }
 
         public sealed override void SendExtraAI(BinaryWriter writer)
@@ -83,5 +98,18 @@ namespace TBAC.Content.Projectiles
         {
             return false;
         }
+
+        public Vector2 GetMousePosition()
+        {
+            var result = mousePosition;
+
+            Vector2 oldMousePos = oldMousePosition ?? Vector2.Zero;
+
+            if (Projectile.owner != Main.myPlayer)
+                result = Vector2.Lerp(oldMousePos, mousePosition, 0.12f);
+
+            return result;
+        }
+
     }
 }

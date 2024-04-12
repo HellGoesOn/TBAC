@@ -28,6 +28,22 @@ namespace TBAC
                         plr.SyncPlayer(-1, whoAmI, false);
                     }
                     break;
+                case PacketType.UsedCombo:
+                    playerNum = reader.ReadByte();
+                    plr = TBAPlayer.Get(Main.player[playerNum]);
+                    int usedCombo = (int)reader.ReadByte();
+                    plr.usedComboId = usedCombo;
+
+                    if (Main.netMode == NetmodeID.Server) {
+                        var packet = this.GetPacket();
+                        packet.Write((byte)packetType);
+                        packet.Write((byte)whoAmI);
+                        packet.Write((byte)usedCombo);
+                        packet.Send(-1, whoAmI);
+                    }
+                    break;
+                default:
+                    break; // ti che ebanulsya?
             }
         }
     }
