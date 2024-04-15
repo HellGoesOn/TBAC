@@ -118,11 +118,11 @@ namespace TBAC.Core.UI
             spriteBatch.Draw(TextureAssets.MagicPixel.Value, myPosition, new Rectangle(0, 0, 1, (int)dist), Color.White, rotation, new Vector2(0.5f, 0), new Vector2(4, 1), SpriteEffects.None, 0f);
 
             for(int i = 0; i < optionCount; i++) {
-                menuOptions[i].Draw(spriteBatch, myPosition, radius, this.rotation, Color.White, Color.White);
+                menuOptions[i].Draw(spriteBatch, myPosition, radius, this.rotation, 1f, Color.White, Color.White);
             }
 
             if(highlightedOption != -1)
-                menuOptions[highlightedOption].Draw(spriteBatch, myPosition, radius, this.rotation, Color.Goldenrod, Color.Goldenrod);
+                menuOptions[highlightedOption].Draw(spriteBatch, myPosition, radius, this.rotation, 1.5f, Color.Goldenrod, Color.Goldenrod);
         }
 
         private bool CheckPoint(Vector2 mousePos, float startangle, float endAngle)
@@ -156,7 +156,7 @@ namespace TBAC.Core.UI
             this.endAngle = endAngle;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 startPosition, float length, float rotation, Color color = default, Color textColor = default) 
+        public void Draw(SpriteBatch spriteBatch, Vector2 startPosition, float length, float rotation, float size = 1f, Color color = default, Color textColor = default) 
         {
             if (color == default)
                 color = Color.White;
@@ -164,8 +164,15 @@ namespace TBAC.Core.UI
             if(textColor == default) 
                 textColor = Color.White;
 
-            spriteBatch.Draw(TextureAssets.MagicPixel.Value, startPosition, new Rectangle(0, 0, (int)length, 1), color, startAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4), SpriteEffects.None, 0f);
-            spriteBatch.Draw(TextureAssets.MagicPixel.Value, startPosition, new Rectangle(0, 0, (int)length, 1), color, endAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4), SpriteEffects.None, 0f);
+            var pos1 = startPosition + new Vector2(80, 0).RotatedBy(startAngle+MathHelper.Pi - rotation);
+            var pos2 = startPosition + new Vector2(80, 0).RotatedBy(endAngle+MathHelper.Pi - rotation);
+            var pos3 = startPosition + new Vector2(82, 0).RotatedBy(startAngle + MathHelper.Pi - rotation);
+            var pos4 = startPosition + new Vector2(82, 0).RotatedBy(endAngle+MathHelper.Pi - rotation);
+
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, pos1, new Rectangle(0, 0, (int)(length + 4), 1), Color.Black, startAngle + MathHelper.Pi - rotation, new Vector2(0.5f), new Vector2(1, 8 * size), SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, pos2, new Rectangle(0, 0, (int)(length + 4), 1), Color.Black, endAngle + MathHelper.Pi - rotation, new Vector2(0.5f), new Vector2(1, 8 * size), SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, pos3, new Rectangle(0, 0, (int)(length), 1), color, startAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4 * size), SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, pos4, new Rectangle(0, 0, (int)(length), 1), color, endAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4 * size), SpriteEffects.None, 0f);
 
             Utils.DrawBorderString(spriteBatch, name, startPosition - new Vector2(333, 0).RotatedBy(startAngle + interval/2-rotation), textColor, 1.5f, 0.5f);
         }
