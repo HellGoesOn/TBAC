@@ -108,6 +108,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                 plr.AddAbility("Plot Armor");
                 plr.AddAbility("'So they are the same type..'");
                 plr.AddAbility("Test4");
+                plr.AddAbility("Test5");
 
                 initialized = true;
             }

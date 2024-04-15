@@ -27,10 +27,6 @@ namespace TBAC.Core.UI
 
         public RadialOption[] menuOptions;
 
-        float angleDiff => MathHelper.TwoPi / optionCount;
-
-        float baseAngle = MathHelper.PiOver2;
-
         public RadialMenuElement(params string[] options)
         {
             visible = true;
@@ -56,12 +52,14 @@ namespace TBAC.Core.UI
             TBAPlayer plr = TBAPlayer.Get(Main.LocalPlayer);
             ResetAvailableOptions(plr);
 
-            rotation += 0.06f;
-
             visible = plr.Player.controlUseTile;
 
             if (!visible || optionCount <= 0)
                 return;
+
+            rotation += 0.012f;
+
+            rotation = MathHelper.WrapAngle(rotation);
 
             Vector2 myPosition = this.GetDimensions().Position();
             Vector2 mouse = myPosition - Main.MouseScreen;
@@ -74,11 +72,10 @@ namespace TBAC.Core.UI
             float inter = MathHelper.TwoPi / optionCount;
             for (int i = 0; i < optionCount; i++) {
 
-                if (CheckPoint(mouse, menuOptions[i].startAngle, menuOptions[i].endAngle, inter)) {
+                if (CheckPoint(mouse, menuOptions[i].startAngle, menuOptions[i].endAngle)) {
                     highlightedOption = i;
                 }
             }
-
         }
 
         private void ResetAvailableOptions(TBAPlayer plr)
@@ -101,6 +98,7 @@ namespace TBAC.Core.UI
                 menuOptions = new RadialOption[optionCount];
                 for (int i = 0; i < optionCount; i++) {
                     menuOptions[i] = new RadialOption(options[i], baseAngle, endAngle);
+                    menuOptions[i].interval = interval;
                     baseAngle = endAngle;
                     endAngle = baseAngle + interval;
                 }
@@ -120,11 +118,14 @@ namespace TBAC.Core.UI
             spriteBatch.Draw(TextureAssets.MagicPixel.Value, myPosition, new Rectangle(0, 0, 1, (int)dist), Color.White, rotation, new Vector2(0.5f, 0), new Vector2(4, 1), SpriteEffects.None, 0f);
 
             for(int i = 0; i < optionCount; i++) {
-                menuOptions[i].Draw(spriteBatch, myPosition, radius, this.rotation, i == highlightedOption ? Color.Goldenrod : Color.White);
+                menuOptions[i].Draw(spriteBatch, myPosition, radius, this.rotation, Color.White, Color.White);
             }
+
+            if(highlightedOption != -1)
+                menuOptions[highlightedOption].Draw(spriteBatch, myPosition, radius, this.rotation, Color.Goldenrod, Color.Goldenrod);
         }
 
-        private bool CheckPoint(Vector2 mousePos, float startangle, float endAngle, float interval)
+        private bool CheckPoint(Vector2 mousePos, float startangle, float endAngle)
         {
             float checkedAngle = mousePos.ToRotation() + rotation;
 
@@ -146,7 +147,7 @@ namespace TBAC.Core.UI
     public class RadialOption
     {
         public string name;
-        public float startAngle, endAngle;
+        public float startAngle, endAngle, interval;
 
         public RadialOption(string name, float startAngle, float endAngle)
         {
@@ -155,24 +156,18 @@ namespace TBAC.Core.UI
             this.endAngle = endAngle;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 startPosition, float length, float rotation, Color color = default) 
+        public void Draw(SpriteBatch spriteBatch, Vector2 startPosition, float length, float rotation, Color color = default, Color textColor = default) 
         {
             if (color == default)
                 color = Color.White;
 
+            if(textColor == default) 
+                textColor = Color.White;
+
             spriteBatch.Draw(TextureAssets.MagicPixel.Value, startPosition, new Rectangle(0, 0, (int)length, 1), color, startAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4), SpriteEffects.None, 0f);
+            spriteBatch.Draw(TextureAssets.MagicPixel.Value, startPosition, new Rectangle(0, 0, (int)length, 1), color, endAngle + MathHelper.Pi-rotation, new Vector2(0.5f), new Vector2(1, 4), SpriteEffects.None, 0f);
 
-            Utils.DrawBorderString(spriteBatch, name, startPosition - new Vector2(333, 0).RotatedBy(startAngle-rotation), color, 1.5f, 0.5f);
-        }
-
-        public float Wrap(float angle)
-        {
-            angle = MathHelper.WrapAngle(angle);
-
-            if (angle < 0)
-                angle += MathHelper.TwoPi;
-
-            return angle;
+            Utils.DrawBorderString(spriteBatch, name, startPosition - new Vector2(333, 0).RotatedBy(startAngle + interval/2-rotation), textColor, 1.5f, 0.5f);
         }
     }
 }
