@@ -18,6 +18,7 @@ namespace TBAC.Core.Animations
         public List<Frame> Frames { get; private set; } = new();
 
         public Action onAnimationEnd;
+        public Action onAnimationStart;
 
         public Sprite(string texturePath)
         {

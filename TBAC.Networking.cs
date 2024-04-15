@@ -42,6 +42,21 @@ namespace TBAC
                         packet.Send(-1, whoAmI);
                     }
                     break;
+
+                case PacketType.UsedAbility:
+                    playerNum = reader.ReadByte();
+                    plr = TBAPlayer.Get(Main.player[playerNum]);
+                    int usedAbility = (int)reader.ReadByte();
+                    plr.usedAbilityId = usedAbility;
+
+                    if (Main.netMode == NetmodeID.Server) {
+                        var packet = this.GetPacket();
+                        packet.Write((byte)packetType);
+                        packet.Write((byte)whoAmI);
+                        packet.Write((byte)usedAbility);
+                        packet.Send(-1, whoAmI);
+                    }
+                    break;
                 default:
                     break; // ti che ebanulsya?
             }

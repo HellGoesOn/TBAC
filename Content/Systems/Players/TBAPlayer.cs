@@ -16,13 +16,17 @@ namespace TBAC.Content.Systems.Players
     public partial class TBAPlayer : ModPlayer
     {
         public int currentStand;
+        public int usedAbilityId;
         public bool isStandActive;
+        public List<StandAbility> standAbilities;
 
         public override void Initialize()
         {
             usedComboId = -1;
+            usedAbilityId = -1;
             currentStand = -1;
             Combos = new List<InputCombo>();
+            standAbilities = new List<StandAbility>();
         }
 
         public override void PostUpdate()
@@ -37,6 +41,12 @@ namespace TBAC.Content.Systems.Players
                 usedComboId = -1;
             }
 
+            if(usedAbilityId != -1 && standAbilities.Count > usedAbilityId) {
+                standAbilities[usedAbilityId].OnUse?.Invoke();
+                SendUsedAbilityPacket();
+                usedAbilityId = -1;
+            }
+
             if (Combos.Any(x => x.IsSuccessfull())) {
                 usedComboId = Combos.FindIndex(x => x.IsSuccessfull());
                 isComboAlive = false;
@@ -44,23 +54,44 @@ namespace TBAC.Content.Systems.Players
                     item.ResetProgress();
                 }
 
-                if(Main.netMode == NetmodeID.MultiplayerClient) {
-                    ModPacket packet = Mod.GetPacket();
-                    packet.Write((byte)PacketType.UsedCombo);
-                    packet.Write((byte)Player.whoAmI);
-                    packet.Write((byte)usedComboId);
-                    packet.Send();
-                }
+                SendUsedComboPacket();
+            }
+        }
+
+        private void SendUsedComboPacket()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)PacketType.UsedCombo);
+                packet.Write((byte)Player.whoAmI);
+                packet.Write((byte)usedComboId);
+                packet.Send();
+            }
+        }
+
+        private void SendUsedAbilityPacket()
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)PacketType.UsedAbility);
+                packet.Write((byte)Player.whoAmI);
+                packet.Write((byte)usedAbilityId);
+                packet.Send();
             }
         }
 
         public InputCombo AddCombo(params TimedInput[] inputs)
         {
             var combo = new InputCombo(inputs);
-
             Combos.Add(combo);
-
             return combo;
+        }
+
+        public StandAbility AddAbility(string name, string descrpition = "")
+        {
+            var result = new StandAbility(name, descrpition);
+            standAbilities.Add(result);
+            return result;
         }
 
         public static TBAPlayer Get(Player player) => player.GetModPlayer<TBAPlayer>();

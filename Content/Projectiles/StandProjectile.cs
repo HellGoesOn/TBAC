@@ -44,6 +44,7 @@ namespace TBAC.Content.Projectiles
             if (plr.currentStand != Projectile.type || !plr.isStandActive) {
                 plr.isStandActive = false;
                 plr.Combos.Clear();
+                plr.standAbilities.Clear();
                 Projectile.Kill();
             }
 

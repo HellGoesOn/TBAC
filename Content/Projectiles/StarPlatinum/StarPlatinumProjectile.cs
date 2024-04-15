@@ -47,6 +47,8 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                 a_idle.Frames.Add(frame); // <-- finally add the frame to the animation
             }
 
+            a_idle.onAnimationStart += () => { Projectile.damage = 0; };
+
             var a_punchMid1 = new Sprite(path + "PunchMid1");
 
             for (int i = 0; i < 3; i++) {
@@ -57,6 +59,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
             }
 
             a_punchMid1.onAnimationEnd += () => { SetAnimation(Anim_Idle); };
+            a_punchMid1.onAnimationStart += () => { Projectile.damage = 50; };
 
             var a_uppercut = new Sprite(path + "Uppercut");
 
@@ -68,6 +71,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
             }
 
             a_uppercut.onAnimationEnd += () => { lockedOverride = false; SetAnimation(Anim_Idle); };
+            a_uppercut.onAnimationStart += () => { Projectile.damage = 300; };
 
             sprites.Add(Anim_Idle, a_idle); // <-- adds sprite to be used
             sprites.Add(Anim_PunchMid1, a_punchMid1);
@@ -100,6 +104,11 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                     lockedOverride = true;
                 };
 
+                plr.AddAbility("Time Stop");
+                plr.AddAbility("Plot Armor");
+                plr.AddAbility("'So they are the same type..'");
+                plr.AddAbility("Test4");
+
                 initialized = true;
             }
 
@@ -113,13 +122,12 @@ namespace TBAC.Content.Projectiles.StarPlatinum
             var destination = GetOwner.Center + new Vector2(50 * -GetOwner.direction, -20);
 
             if (GetOwner.controlUseItem && !lastRMBState) {
-                PunchTimer = 120;
                 SetAnimation(Anim_PunchMid1);
+                PunchTimer = 120;
             }
 
             if (PunchTimer > 0) {
                 PunchTimer--;
-
                 destination = GetMousePosition();
             }
 
@@ -149,6 +157,7 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                 sprites[_currentAnimation].frameTime = 0;
             }
             _currentAnimation = value;
+            sprites[_currentAnimation].onAnimationStart?.Invoke();
         }
     }
 }

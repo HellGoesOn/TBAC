@@ -11,12 +11,7 @@ namespace TBAC.Core.UI
     {
         public override void OnInitialize()
         {
-            RadialMenuElement radialMenuElement = new RadialMenuElement(
-                "Test1", "Test2","Test3",
-                "Test4", "Test5", "Test6",
-                "Test7", "Test8", "Test9"/*,
-                "Test10", "Test11", "Test12"*/
-                );
+            RadialMenuElement radialMenuElement = new RadialMenuElement();
             radialMenuElement.HAlign = 0.5f;
             radialMenuElement.VAlign = 0.5f;
             this.Append(radialMenuElement);
