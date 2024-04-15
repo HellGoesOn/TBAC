@@ -57,7 +57,7 @@ namespace TBAC.Core.UI
             if (!visible || optionCount <= 0)
                 return;
 
-            rotation += 0.012f;
+            rotation = 0.0f;
 
             rotation = MathHelper.WrapAngle(rotation);
 
