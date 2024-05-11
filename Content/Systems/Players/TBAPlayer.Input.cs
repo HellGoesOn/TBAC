@@ -21,10 +21,10 @@ namespace TBAC.Content.Systems.Players
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (TBAInput.GetStand.JustPressed) {
+            /*if (TBAInput.OpenAbilityWheel.JustPressed) {
                 currentStand = StandLoader.Stands[Main.rand.Next(0, StandLoader.Stands.Count)];
                 Main.NewText($"Total Stand Count: {StandLoader.Stands.Count}; Got Stand {currentStand}");
-            }
+            }*/
 
             if (currentStand == -1) // do nothing if we have no stand selected
                 return;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TBAC.Content.Projectiles.StarPlatinum;
 using TBAC.Content.Projectiles.Test;
 using TBAC.Core;
 using Terraria;
@@ -24,7 +25,7 @@ namespace TBAC.Content.Systems.Players
         {
             usedComboId = -1;
             usedAbilityId = -1;
-            currentStand = -1;
+            currentStand = ModContent.ProjectileType<StarPlatinumProjectile>();
             Combos = new List<InputCombo>();
             standAbilities = new List<StandAbility>();
         }
@@ -43,7 +44,6 @@ namespace TBAC.Content.Systems.Players
 
             if(usedAbilityId != -1 && standAbilities.Count > usedAbilityId) {
                 standAbilities[usedAbilityId].OnUse?.Invoke();
-                SendUsedAbilityPacket();
                 usedAbilityId = -1;
             }
 
@@ -58,7 +58,7 @@ namespace TBAC.Content.Systems.Players
             }
         }
 
-        private void SendUsedComboPacket()
+        public void SendUsedComboPacket()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 ModPacket packet = Mod.GetPacket();
@@ -69,7 +69,7 @@ namespace TBAC.Content.Systems.Players
             }
         }
 
-        private void SendUsedAbilityPacket()
+        public void SendUsedAbilityPacket()
         {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 ModPacket packet = Mod.GetPacket();

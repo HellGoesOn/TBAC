@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TBAC.Content.Systems;
 using TBAC.Content.Systems.Players;
 using Terraria;
 using Terraria.GameContent;
@@ -24,6 +25,7 @@ namespace TBAC.Core.UI
         private float radius = 333.0f;
         private float rotation;
         public bool visible;
+        private bool wheelButtonReleased;
 
         public RadialOption[] menuOptions;
 
@@ -52,7 +54,15 @@ namespace TBAC.Core.UI
             TBAPlayer plr = TBAPlayer.Get(Main.LocalPlayer);
             ResetAvailableOptions(plr);
 
-            visible = plr.Player.controlUseTile;
+            visible = TBAInput.OpenAbilityWheel.Current;
+
+            if (wheelButtonReleased && !TBAInput.OpenAbilityWheel.Current && highlightedOption != -1) {
+                plr.usedAbilityId = highlightedOption;
+                highlightedOption = -1;
+                plr.SendUsedAbilityPacket();
+            }
+
+            wheelButtonReleased = TBAInput.OpenAbilityWheel.Current;
 
             if (!visible || optionCount <= 0)
                 return;

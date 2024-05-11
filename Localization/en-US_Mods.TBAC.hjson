@@ -7,4 +7,8 @@ Projectiles: {
 Keybinds: {
 	SummonStand.DisplayName: Summon Stand
 	GetRandomStand.DisplayName: Get Random Stand
+	AbilityOne.DisplayName: Ability One
+	AbilityTwo.DisplayName: Ability Two
+	AbilityThree.DisplayName: Ability Three
+	OpenAbilityWheel.DisplayName: Open Ability Wheel
 }

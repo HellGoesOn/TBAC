@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TBAC.Content.Systems;
 using TBAC.Content.Systems.Players;
+using TBAC.Content.Systems.TimeStop;
 using TBAC.Core.Animations;
 using Terraria;
 
@@ -104,9 +105,13 @@ namespace TBAC.Content.Projectiles.StarPlatinum
                     lockedOverride = true;
                 };
 
-                plr.AddAbility("Time Stop");
+                plr.AddAbility("Time Stop").OnUse += () =>
+                {
+                    TimeStopSystem.StopTimeFor((byte)plr.Player.whoAmI, 300);
+                    Main.NewText("STAR PLATINUM: THE WORLD!");
+                };
                 plr.AddAbility("Plot Armor");
-                plr.AddAbility("'So they are the same type..'");
+                plr.AddAbility("'So they are the same type..'").OnUse += () => { Main.NewText($"<{plr.Player.name}>So they are the same type of stand.."); };
                 plr.AddAbility("Test4");
                 plr.AddAbility("Test5");
 
